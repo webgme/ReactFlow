@@ -1,0 +1,8 @@
+[
+  {
+    "id": "FlowClassDiagram",
+    "title": "FlowClassDiagram",
+    "panel": "panels/FlowClassDiagram/FlowClassDiagramPanel",
+    "DEBUG_ONLY": false
+  }
+]

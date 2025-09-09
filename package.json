@@ -1,0 +1,47 @@
+{
+  "name": "reactflow",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node ./node_modules/mocha/bin/mocha --recursive test",
+    "apply": "node ./node_modules/webgme-engine/src/bin/apply.js",
+    "diff": "node ./node_modules/webgme-engine/src/bin/diff.js",
+    "export": "node ./node_modules/webgme-engine/src/bin/export.js",
+    "import": "node ./node_modules/webgme-engine/src/bin/import.js",
+    "merge": "node ./node_modules/webgme-engine/src/bin/merge.js",
+    "plugin": "node ./node_modules/webgme-engine/src/bin/run_plugin.js",
+    "pluginHook": "node ./node_modules/webgme-engine/src/bin/plugin_hook.js",
+    "users": "node ./node_modules/webgme-engine/src/bin/usermanager.js",
+    "clean_up": "node ./node_modules/webgme-engine/src/bin/clean_up.js",
+    "webpack": "node ./node_modules/webpack/bin/webpack.js --mode=production",
+    "webpack_dev": "node ./node_modules/webpack/bin/webpack.js --mode=development"
+  },
+  "version": "1.0.0",
+  "peerDependencies": {
+    "webgme": "^2.23.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "@mui/material": "^7.3.2",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
+    "babel-loader": "^9.1.2",
+    "babel-plugin-macros": "^3.1.0",
+    "css-loader": "^6.7.3",
+    "mini-css-extract-plugin": "^2.7.5",
+    "mocha": "^5.2.0",
+    "react-bootstrap": "^2.7.2",
+    "reactflow": "^11.11.4",
+    "webpack-cli": "^5.0.1",
+    "wrapper-webpack-plugin": "^2.2.2"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.5.0",
+    "webgme": "^2.23.0"
+  }
+}

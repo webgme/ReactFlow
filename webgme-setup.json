@@ -1,0 +1,22 @@
+{
+  "components": {
+    "visualizers": {
+      "FlowClassDiagram": {
+        "src": "panels/FlowClassDiagram/FlowClassDiagramPanel",
+        "title": "FlowClassDiagram",
+        "panel": "src/visualizers/panels/FlowClassDiagram",
+        "secondary": false,
+        "widget": "src/visualizers/widgets/FlowClassDiagram"
+      }
+    },
+    "seeds": {
+      "ClassDiagram": {
+        "src": "src/seeds/ClassDiagram"
+      }
+    }
+  },
+  "dependencies": {
+    "visualizers": {},
+    "seeds": {}
+  }
+}
