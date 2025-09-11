@@ -117,25 +117,25 @@ const getEdgeConfig = (edgeData, sourceNode, targetNode) => {
       sourceRole: {
         displayName: sourceNode?.data?.label ? `${sourceNode.data.label} Role` : 'Source Role',
         type: 'string',
-        defaultValue: edgeData?.data?.sourceRole || ' ',
+        defaultValue: edgeData?.data?.startRole || ' ',
         placeholder: sourceNode?.data?.label ? `Role for ${sourceNode.data.label}` : 'Source role'
       },
       sourceCardinality: {
         displayName: sourceNode?.data?.label ? `${sourceNode.data.label} Cardinality` : 'Source Cardinality',
         type: 'string',
-        defaultValue: edgeData?.data?.sourceCardinality || ' ',
+        defaultValue: edgeData?.data?.startCardinality || ' ',
         placeholder: 'e.g., 1, *, 0..1'
       },
       destinationRole: {
         displayName: targetNode?.data?.label ? `${targetNode.data.label} Role` : 'Destination Role',
         type: 'string',
-        defaultValue: edgeData?.data?.destinationRole || ' ',
+        defaultValue: edgeData?.data?.endRole || ' ',
         placeholder: targetNode?.data?.label ? `Role for ${targetNode.data.label}` : 'Destination role'
       },
       destinationCardinality: {
         displayName: targetNode?.data?.label ? `${targetNode.data.label} Cardinality` : 'Destination Cardinality',
         type: 'string',
-        defaultValue: edgeData?.data?.destinationCardinality || ' ',
+        defaultValue: edgeData?.data?.endCardinality || ' ',
         placeholder: 'e.g., 1, *, 0..1'
       }
     }
@@ -723,7 +723,6 @@ export default function Flow(props) {
         </style>
         <ReactFlow
           elementsSelectable={false}
-          elementsFocusable={false}
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}

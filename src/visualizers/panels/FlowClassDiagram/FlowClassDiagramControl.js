@@ -55,7 +55,7 @@ define([
         if (typeof self._currentNodeId === 'string') {
             // Put new node's info into territory rules
             self._selfPatterns = {};
-            self._selfPatterns[nodeId] = {children: 0};  // Territory "rule"
+            self._selfPatterns[nodeId] = {children: 2};  // Territory "rule"
 
             if (typeof currentNode.getParentId() === 'string') {
                 self.$btnModelHierarchyUp.show();
@@ -69,10 +69,6 @@ define([
                 self._eventCallback(events);
             });
 
-            // Update the territory
-            self._client.updateTerritory(self._territoryId, self._selfPatterns);
-
-            self._selfPatterns[nodeId] = {children: 2};
             self._client.updateTerritory(self._territoryId, self._selfPatterns);
         }
     };
@@ -99,7 +95,8 @@ define([
             deleteMethod: this.deleteMethod.bind(this),
             deleteAssociation: this.deleteAssociation.bind(this),
             createAssociation: this.createAssociation.bind(this),
-            updateClass: this.updateClass.bind(this)
+            updateClass: this.updateClass.bind(this),
+            updateEdge: this.updateEdge.bind(this)
         }};
         
         MainNode.getChildrenIds().forEach(childId => {
@@ -107,11 +104,16 @@ define([
             if(childNode.isInstanceOf(this._META['Class'].getId())) {
                 descriptor.nodes.push(this._createClassDescriptor(childId));
             } else if(childNode.isInstanceOf(this._META['Association'].getId())) {
+                const sourceNodeId = childNode.getPointerId('src');
+                const targetNodeId = childNode.getPointerId('dst');
+                
                 const connectionDescriptor = {
                     id: childId,
                     type:'smoothstep', 
-                    source: childNode.getPointerId('src'), 
-                    target: childNode.getPointerId('dst'),
+                    source: sourceNodeId, 
+                    sourceHandle: `target-${childId}`,
+                    target: targetNodeId,
+                    targetHandle: `source-${childId}`,
                     data: {
                         startLabel: childNode.getAttribute('sRole') + ' (' + childNode.getAttribute('sCard') + ')',
                         startCardinality: childNode.getAttribute('sCard'),
@@ -145,7 +147,9 @@ define([
             label: classNode.getAttribute('name'),
             stereotype: classNode.getAttribute('stereotype'),
             attributes:[], 
-            methods:[]
+            methods:[],
+            sources: [],
+            targets: []
         };
         classNode.getChildrenIds().forEach(childId => {
             const childNode = this._client.getNode(childId);
@@ -182,7 +186,32 @@ define([
         }
     };
 
+    FlowClassDiagramControl.prototype._addConncetivity = function (descriptor) {
+        descriptor.nodes.forEach(node => {
+            node.data.sources = node.data.sources || [];
+            node.data.targets = node.data.targets || [];
+        });
+
+        descriptor.edges.forEach(edge => {
+            descriptor.nodes.forEach((node,index) => {
+                if(node.id === edge.source) {
+                    descriptor.nodes[index].data.targets.push(edge.id);
+                }
+                if(node.id === edge.target) {
+                    descriptor.nodes[index].data.sources.push(edge.id);
+                }
+            });
+        });
+
+        descriptor.nodes.forEach(node => {
+            node.data.sources = node.data.sources.sort();    
+            node.data.targets = node.data.targets.sort();
+        });
+        return descriptor;
+    }
+
     FlowClassDiagramControl.prototype._setDescriptor = function (descriptor) {
+        descriptor = this._addConncetivity(descriptor);
         this._descriptor = descriptor;
 
         if(this._updateWidget) {
@@ -308,9 +337,20 @@ define([
         const classNode = this._client.getNode(classId);
         const oldName = classNode.getAttribute('name');
         this._client.startTransaction('Updating Class [' + oldName + ']');
-        classNode.setAttribute('name', name);
-        classNode.setAttribute('stereotype', stereotype);
+        if(name !== oldName) {
+            this._client.setAttribute(classId, 'name', name);
+        }
+        this._client.setAttribute(classId, 'stereotype', stereotype);
         this._client.completeTransaction('Class [' + name + '] have been updated');
+    };
+    FlowClassDiagramControl.prototype.updateEdge = function(edgeId, data) {
+        const edgeNode = this._client.getNode(edgeId);
+        this._client.startTransaction('Updating Edge [' + edgeId + ']');
+        this._client.setAttribute(edgeId, 'sRole', data.sourceRole);
+        this._client.setAttribute(edgeId, 'sCard', data.sourceCardinality);
+        this._client.setAttribute(edgeId, 'dRole', data.destinationRole);
+        this._client.setAttribute(edgeId, 'dCard', data.destinationCardinality);
+        this._client.completeTransaction('Edge [' + edgeId + '] have been updated');
     };
 
     /* * * * * * * * * * Updating the toolbar * * * * * * * * * */

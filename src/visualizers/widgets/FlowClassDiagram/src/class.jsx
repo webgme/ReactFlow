@@ -93,8 +93,32 @@ export default function classNode({id, data}) {
             ))}
           </List>
         </Box>
-        <Handle type="source" position={Position.Right} />
-        <Handle type="target" position={Position.Left} />
+        {data.sources && data.sources.map((source, index) => {
+          const totalSources = data.sources.length;
+          const offset = totalSources > 1 ? (index - (totalSources - 1) / 2) * 20 : 0;
+          return (
+            <Handle 
+              key={`target-${source}`} 
+              id={`target-${source}`} 
+              type="source" 
+              position={Position.Right}
+              style={{ top: `${50 + offset}%` }}
+            />
+          );
+        })}
+        {data.targets && data.targets.map((target, index) => {
+          const totalTargets = data.targets.length;
+          const offset = totalTargets > 1 ? (index - (totalTargets - 1) / 2) * 20 : 0;
+          return (
+            <Handle 
+              key={`source-${target}`} 
+              id={`source-${target}`} 
+              type="target" 
+              position={Position.Left}
+              style={{ top: `${50 + offset}%` }}
+            />
+          );
+        })}
 
       </div>
   )
