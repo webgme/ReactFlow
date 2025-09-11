@@ -7,7 +7,9 @@ var config = require('webgme/config/config.default'),
     validateConfig = require('webgme/config/validator');
 
 // The paths can be loaded from the webgme-setup.json
+config.visualization.layout.basePaths.push(__dirname + '/../src/layouts');
 config.seedProjects.basePaths.push(__dirname + '/../src/seeds/ClassDiagram');
+config.seedProjects.basePaths.push(__dirname + '/../src/seeds/cd');
 
 
 

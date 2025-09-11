@@ -7,16 +7,32 @@
         "panel": "src/visualizers/panels/FlowClassDiagram",
         "secondary": false,
         "widget": "src/visualizers/widgets/FlowClassDiagram"
+      },
+      "FlowList": {
+        "src": "panels/FlowList/FlowListPanel",
+        "title": "FlowList",
+        "panel": "src/visualizers/panels/FlowList",
+        "secondary": false,
+        "widget": "src/visualizers/widgets/FlowList"
       }
     },
     "seeds": {
       "ClassDiagram": {
         "src": "src/seeds/ClassDiagram"
+      },
+      "cd": {
+        "src": "src/seeds/cd"
+      }
+    },
+    "layouts": {
+      "FlowLayout": {
+        "src": "src/layouts/FlowLayout"
       }
     }
   },
   "dependencies": {
     "visualizers": {},
-    "seeds": {}
+    "seeds": {},
+    "layouts": {}
   }
 }

@@ -21,9 +21,6 @@ define([
 
         this._client = options.client;
 
-        // Initialize core collections and variables
-        this._widget = options.widget;
-
         this._currentNodeId = null;
         this._currentNodeParentId = undefined;
 
@@ -34,17 +31,8 @@ define([
             this._META[metaNode.getFullyQualifiedName()] = metaNode;
         });
 
-        // this._initWidgetEventHandlers();
-
         this._logger.debug('ctor finished');
     }
-
-    FlowClassDiagramControl.prototype._initWidgetEventHandlers = function () {
-        this._widget.onNodeClick = function (id) {
-            // Change the current active object
-            WebGMEGlobal.State.registerActiveObject(id);
-        };
-    };
 
     /* * * * * * * * Visualizer content update callbacks * * * * * * * */
     // One major concept here is with managing the territory. The territory
@@ -110,7 +98,8 @@ define([
             addMethod: this.addMethod.bind(this),
             deleteMethod: this.deleteMethod.bind(this),
             deleteAssociation: this.deleteAssociation.bind(this),
-            createAssociation: this.createAssociation.bind(this)
+            createAssociation: this.createAssociation.bind(this),
+            updateClass: this.updateClass.bind(this)
         }};
         
         MainNode.getChildrenIds().forEach(childId => {
@@ -208,7 +197,7 @@ define([
             this.selectedObjectChanged(activeObjectId);
         }
     };
-
+    
     /* * * * * * * * Visualizer life cycle callbacks * * * * * * * */
     FlowClassDiagramControl.prototype.destroy = function () {
         this._detachClientEventListeners();
@@ -313,6 +302,15 @@ define([
         this._client.setPointer(link, 'src', sourceId);
         this._client.setPointer(link, 'dst', targetId);
         this._client.completeTransaction('Association [' + type + '] have been created');
+    };
+
+    FlowClassDiagramControl.prototype.updateClass = function(classId, name, stereotype) {
+        const classNode = this._client.getNode(classId);
+        const oldName = classNode.getAttribute('name');
+        this._client.startTransaction('Updating Class [' + oldName + ']');
+        classNode.setAttribute('name', name);
+        classNode.setAttribute('stereotype', stereotype);
+        this._client.completeTransaction('Class [' + name + '] have been updated');
     };
 
     /* * * * * * * * * * Updating the toolbar * * * * * * * * * */

@@ -71,25 +71,20 @@ const ADD_METHOD_CONFIG = {
   }
 };
 
-const getNodeConfig = (nodeLabel) => ({
-  title: `Configure ${nodeLabel || 'Node'}`,
+const getNodeConfig = (nodeData) => ({
+  title: `Configure ${nodeData?.label || 'Node'}`,
   elements: {
     name: {
-      displayName: 'Class Name',
+      displayName: 'Name',
       type: 'string',
       required: true,
-      defaultValue: nodeLabel || ''
+      defaultValue: nodeData?.label || ''
     },
-    visibility: {
-      displayName: 'Visibility',
-      type: 'enum',
-      options: ['public', 'private', 'protected'],
-      defaultValue: 'public'
-    },
-    isAbstract: {
-      displayName: 'Abstract',
-      type: 'boolean',
-      defaultValue: false
+    stereotype: {
+      displayName: 'Stereotype',
+      type: 'string',
+      required: false,
+      defaultValue: nodeData?.stereotype || ''
     }
   }
 });
@@ -522,6 +517,9 @@ export default function Flow(props) {
     } else if (configType === 'addMethod') {
       // Handle adding method to the node
       props.global.addMethod(selectedNode.id, formData.visibility, formData.specification);
+    } else if (configType === 'node') {
+      // Handle node configuration - update class name and stereotype
+      props.global.updateClass(selectedNode.id, formData.name, formData.stereotype);
     } else if (configType === 'edge') {
       // Handle edge configuration - map form data to edge data structure
       const edgeData = {
@@ -580,7 +578,7 @@ export default function Flow(props) {
         // Open config dialog for node
         setSelectedNode(contextData);
         setConfigType('node');
-        setCurrentConfig(getNodeConfig(contextData?.data?.label));
+        setCurrentConfig(getNodeConfig(contextData?.data));
         setConfigOpen(true);
         break;
       case 'deleteClass':

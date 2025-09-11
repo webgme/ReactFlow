@@ -59,8 +59,7 @@ define([
 
         this.control = new FlowClassDiagramControl({
             logger: this.logger,
-            client: this._client,
-            widget: {}
+            client: this._client
         });
 
         this.onActivate();

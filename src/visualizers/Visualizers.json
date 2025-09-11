@@ -1,8 +1,14 @@
 [
   {
     "id": "FlowClassDiagram",
-    "title": "FlowClassDiagram",
+    "title": "Class Diagram Editor",
     "panel": "panels/FlowClassDiagram/FlowClassDiagramPanel",
+    "DEBUG_ONLY": false
+  },
+  {
+    "id": "FlowList",
+    "title": "Diagram Selector",
+    "panel": "panels/FlowList/FlowListPanel",
     "DEBUG_ONLY": false
   }
 ]

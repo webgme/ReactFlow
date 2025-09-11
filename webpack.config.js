@@ -4,7 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
-        FlowClassDiagram: './src/visualizers/widgets/FlowClassDiagram/src/index.jsx'
+        FlowClassDiagram: './src/visualizers/widgets/FlowClassDiagram/src/index.jsx',
+        FlowList: './src/visualizers/widgets/FlowList/src/index.jsx'
     },
     output: {
         filename: '[name]Widget.bundle.js',
