@@ -7,8 +7,7 @@ define([
     'js/PanelBase/PanelBaseWithHeader',
     'js/PanelManager/IActivePanel',
     'reactflow/bundles/FlowListWidget.bundle',
-    './FlowListControl',
-    'css!reactflow/bundles/styles/FlowListWidget.bundle.css'
+    './FlowListControl'
 ], function (
     PanelBaseWithHeader,
     IActivePanel,

@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import { ReactFlow, applyNodeChanges, applyEdgeChanges, Position, addEdge, BaseEdge, getSmoothStepPath, EdgeLabelRenderer, Controls } from 'reactflow';
-import 'reactflow/dist/style.css';
+import { useState, useCallback, useEffect } from 'react';
+import { ReactFlow, ReactFlowProvider, useUpdateNodeInternals, applyNodeChanges, applyEdgeChanges, Position, BaseEdge, getSmoothStepPath, EdgeLabelRenderer } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 import classNode from './class';
 import Config from './config';
 import ContextMenu from './contextMenu';
@@ -142,8 +142,7 @@ const getEdgeConfig = (edgeData, sourceNode, targetNode) => {
   };
 };
 
-const InheritanceEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style }) => {
-  //console.log('InheritanceEdge rendering:', { id, sourceX, sourceY, targetX, targetY, path, style });
+const InheritanceEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, sourceHandle, targetHandle }) => {
   
   // Use getSmoothStepPath to create a smooth path
   const [edgePath, labelX, labelY] = getSmoothStepPath({
@@ -156,6 +155,7 @@ const InheritanceEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style }
     borderRadius: 10,
   });
 
+
   return (
     <>
       <BaseEdge
@@ -167,8 +167,7 @@ const InheritanceEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style }
   );
 };
 
-const CompositionEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data }) => {
-  //console.log('CompositionEdge rendering:', { id, sourceX, sourceY, targetX, targetY, path, style });
+const CompositionEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data, sourceHandle, targetHandle }) => {
   
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
@@ -179,6 +178,7 @@ const CompositionEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, 
     targetPosition: Position.Left,
     borderRadius: 10,
   });
+
 
   return (
     <>
@@ -192,8 +192,7 @@ const CompositionEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, 
   );
 };
 
-const AggregationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data }) => {
-  //console.log('AggregationEdge rendering:', { id, sourceX, sourceY, targetX, targetY, path, style });
+const AggregationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data, sourceHandle, targetHandle }) => {
   
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
@@ -204,6 +203,7 @@ const AggregationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, 
     targetPosition: Position.Left,
     borderRadius: 10,
   });
+
 
   return (
     <>
@@ -217,8 +217,7 @@ const AggregationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, 
   );
 };
 
-const NavigableAssociationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data }) => {
-  //console.log('NavigableAssociationEdge rendering:', { id, sourceX, sourceY, targetX, targetY, path, style });
+const NavigableAssociationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data, sourceHandle, targetHandle }) => {
   
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
@@ -229,6 +228,7 @@ const NavigableAssociationEdge = ({ id, sourceX, sourceY, targetX, targetY, path
     targetPosition: Position.Left,
     borderRadius: 10,
   });
+
 
   return (
     <>
@@ -243,7 +243,6 @@ const NavigableAssociationEdge = ({ id, sourceX, sourceY, targetX, targetY, path
 };
 
 const EndLabels = ({ sourceX, sourceY, targetX, targetY, startLabel, endLabel, path}) => {
-  //console.log('EndLabels props:', { sourceX, sourceY, targetX, targetY, startLabel, endLabel, path });
 
   // Function to get point on path at a given percentage
   const getPointOnPath = (pathString, percentage) => {
@@ -314,8 +313,7 @@ const EndLabels = ({ sourceX, sourceY, targetX, targetY, startLabel, endLabel, p
   );
 };
 
-const AssociationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data }) => {
-  //console.log('AssociationEdge rendering:', { id, sourceX, sourceY, targetX, targetY, path, style });
+const AssociationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, data, sourceHandle, targetHandle }) => {
   
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
@@ -326,6 +324,7 @@ const AssociationEdge = ({ id, sourceX, sourceY, targetX, targetY, path, style, 
     targetPosition: Position.Left,
     borderRadius: 10,
   });
+
 
   return (
     <>
@@ -350,7 +349,7 @@ const edgeTypes = {
   association: AssociationEdge,
 };
 
-export default function Flow(props) {
+function InnerFlow(props) {
   const [nodes, setNodes] = useState(props.nodes);
   const [edges, setEdges] = useState(props.edges);
   const [configOpen, setConfigOpen] = useState(false);
@@ -583,7 +582,6 @@ export default function Flow(props) {
         break;
       case 'deleteClass':
         // Handle delete class
-        // console.log('Deleting class:', contextData.id);
         props.global.deleteClass(contextData.id);
         break;
       // Edge actions
@@ -654,7 +652,6 @@ export default function Flow(props) {
   };
 
   const handleNodeDragStop = useCallback((event, node) => {
-    //console.log('Node drag stopped:', node.id, 'at position:', node.position);
     
     // Update our global state with the final position
     props.global.setPosition(node.id, node.position);
@@ -679,6 +676,9 @@ export default function Flow(props) {
     });
 
   }, []);
+
+  const onConnectStart = useCallback((params) => {
+  }, [useUpdateNodeInternals]); 
  
   return (
     <>
@@ -729,6 +729,7 @@ export default function Flow(props) {
           edgeTypes={edgeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          onConnectStart={onConnectStart}
           onConnect={onConnect}
           onNodeClick={handleNodeClick}
           onEdgeClick={handleEdgeClick}
@@ -822,5 +823,13 @@ export default function Flow(props) {
         </DialogActions>
       </Dialog>
     </>
+  );
+}
+
+export default function Flow(props) {
+  return (
+    <ReactFlowProvider>
+      <InnerFlow {...props} />
+    </ReactFlowProvider>
   );
 }

@@ -19,9 +19,6 @@
     "seeds": {
       "ClassDiagram": {
         "src": "src/seeds/ClassDiagram"
-      },
-      "cd": {
-        "src": "src/seeds/cd"
       }
     },
     "layouts": {

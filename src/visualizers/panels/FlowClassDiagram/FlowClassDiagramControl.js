@@ -84,6 +84,7 @@ define([
     };
 
     FlowClassDiagramControl.prototype._createDescriptor = function () {
+        console.log(WebGMEGlobal.componentSettings);
         const MainNode = this._client.getNode(this._currentNodeId);
         const descriptor = {nodes:[], edges:[], global: {
             setPosition: this.updatePositionOfNode.bind(this),
@@ -110,10 +111,8 @@ define([
                 const connectionDescriptor = {
                     id: childId,
                     type:'smoothstep', 
-                    source: sourceNodeId, 
-                    sourceHandle: `target-${childId}`,
+                    source: sourceNodeId,
                     target: targetNodeId,
-                    targetHandle: `source-${childId}`,
                     data: {
                         startLabel: childNode.getAttribute('sRole') + ' (' + childNode.getAttribute('sCard') + ')',
                         startCardinality: childNode.getAttribute('sCard'),
@@ -148,8 +147,8 @@ define([
             stereotype: classNode.getAttribute('stereotype'),
             attributes:[], 
             methods:[],
-            sources: [],
-            targets: []
+            numOfSources: 0,
+            numOfTargets: 0
         };
         classNode.getChildrenIds().forEach(childId => {
             const childNode = this._client.getNode(childId);
@@ -187,26 +186,27 @@ define([
     };
 
     FlowClassDiagramControl.prototype._addConncetivity = function (descriptor) {
-        descriptor.nodes.forEach(node => {
-            node.data.sources = node.data.sources || [];
-            node.data.targets = node.data.targets || [];
+        descriptor.edges = descriptor.edges.sort((a,b) => {
+            return a.id - b.id;
         });
 
-        descriptor.edges.forEach(edge => {
+        descriptor.edges.forEach((edge, edgeIndex)=> {
+            let sId = '';
+            let tId = '';
             descriptor.nodes.forEach((node,index) => {
                 if(node.id === edge.source) {
-                    descriptor.nodes[index].data.targets.push(edge.id);
+                    sId = 's' + node.data.numOfSources;
+                    descriptor.nodes[index].data.numOfSources++;
                 }
                 if(node.id === edge.target) {
-                    descriptor.nodes[index].data.sources.push(edge.id);
+                    tId = 't' + node.data.numOfTargets;
+                    descriptor.nodes[index].data.numOfTargets++;
                 }
             });
+            descriptor.edges[edgeIndex].sourceHandle = sId;
+            descriptor.edges[edgeIndex].targetHandle = tId;
         });
-
-        descriptor.nodes.forEach(node => {
-            node.data.sources = node.data.sources.sort();    
-            node.data.targets = node.data.targets.sort();
-        });
+        
         return descriptor;
     }
 

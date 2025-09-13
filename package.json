@@ -1,5 +1,5 @@
 {
-  "name": "reactflow",
+  "name": "webgme-reactflow",
   "scripts": {
     "start": "node app.js",
     "test": "node ./node_modules/mocha/bin/mocha --recursive test",
@@ -15,7 +15,7 @@
     "webpack": "node ./node_modules/webpack/bin/webpack.js --mode=production",
     "webpack_dev": "node ./node_modules/webpack/bin/webpack.js --mode=development"
   },
-  "version": "1.0.0",
+  "version": "0.0.1",
   "peerDependencies": {
     "webgme": "^2.23.0"
   },
@@ -28,13 +28,13 @@
     "@mui/material": "^7.3.2",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
+    "@xyflow/react": "^12.8.4",
     "babel-loader": "^9.1.2",
     "babel-plugin-macros": "^3.1.0",
     "css-loader": "^6.7.3",
     "mini-css-extract-plugin": "^2.7.5",
     "mocha": "^5.2.0",
     "react-bootstrap": "^2.7.2",
-    "reactflow": "^11.11.4",
     "webpack-cli": "^5.0.1",
     "wrapper-webpack-plugin": "^2.2.2"
   },

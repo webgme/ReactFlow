@@ -186,37 +186,36 @@ export default function ListComponent(props) {
                   {element.icon}
                 </ListItemIcon>
                 
-                <ListItemText
-                  primary={
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography 
+                    variant="h6" 
+                    component="div"
+                    sx={{ 
+                      fontWeight: 'medium',
+                      color: theme.palette.text.primary,
+                      mb: 0.5
+                    }}
+                  >
+                    {element.name}
+                  </Typography>
+                  <Box>
                     <Typography 
-                      variant="h6" 
-                      sx={{ 
-                        fontWeight: 'medium',
-                        color: theme.palette.text.primary,
-                        mb: 0.5
-                      }}
+                      variant="body2" 
+                      component="div"
+                      color="text.secondary"
+                      sx={{ mb: 0.5 }}
                     >
-                      {element.name}
+                      {element.description}
                     </Typography>
-                  }
-                  secondary={
-                    <Box>
-                      <Typography 
-                        variant="body2" 
-                        color="text.secondary"
-                        sx={{ mb: 0.5 }}
-                      >
-                        {element.description}
-                      </Typography>
-                      <Typography 
-                        variant="caption" 
-                        color="text.disabled"
-                      >
-                        Type: {element.type}
-                      </Typography>
-                    </Box>
-                  }
-                />
+                    <Typography 
+                      variant="caption" 
+                      component="div"
+                      color="text.disabled"
+                    >
+                      Type: {element.type}
+                    </Typography>
+                  </Box>
+                </Box>
                 
                 <Box sx={{ 
                   display: 'flex', 

@@ -1,0 +1,29 @@
+{
+  "GenericUIProjectNavigatorController": {
+    "byProjectKind": {
+      "rootNode": {
+        "ClassDiagram": "/H"
+      }
+    }
+  },
+  "GenericUIWebGMEStart": {
+    "byProjectKind": {
+      "nodeAtOpen": {
+        "ClassDiagram": "/H"
+      },
+      "layout": {
+        "ClassDiagram": "FlowLayout"
+      },
+      "pageTitle": {
+        "ClassDiagram": "Class Diagram Editor"
+      }
+    }
+  },
+  "GenericUITreeBrowserControl": {
+    "byProjectKind": {
+      "treeRoot": {
+        "ClassDiagram": "/H"
+      }
+    }
+  }
+}
